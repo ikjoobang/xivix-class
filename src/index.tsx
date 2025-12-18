@@ -8,8 +8,8 @@ type Bindings = {
 
 const app = new Hono<{ Bindings: Bindings }>()
 
+// CORS는 API 라우트에만 적용
 app.use('/api/*', cors())
-app.use('/*', serveStatic())
 
 const SYSTEM_PROMPT = `당신은 지빅스(XIVIX)의 20년 차 베테랑 영업 이사 '방 이사'입니다.
 
@@ -123,5 +123,8 @@ app.get('/api/health', (c) => {
     service: 'XIVIX AI v2'
   })
 })
+
+// 정적 파일 제공 (public 폴더)
+app.use('/*', serveStatic())
 
 export default app
