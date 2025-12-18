@@ -163,6 +163,11 @@ app.get('/payment-fail', (c) => {
   return c.html(PAYMENT_FAIL_HTML)
 })
 
+// 결제 테스트 페이지 (1,000원)
+app.get('/payment-test', (c) => {
+  return c.html(PAYMENT_TEST_HTML)
+})
+
 // 정적 파일 제공 (public 폴더)
 app.use('/*', serveStatic())
 
@@ -722,6 +727,142 @@ const PAYMENT_FAIL_HTML = `<!DOCTYPE html>
         } else {
             errorBox.style.display = 'none';
         }
+    </script>
+</body>
+</html>`
+
+// 결제 테스트 페이지 HTML (1,000원)
+const PAYMENT_TEST_HTML = `<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>결제 테스트 (1,000원)</title>
+    <script src="https://cdn.portone.io/v2/browser-sdk.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background: #0a0a0a;
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .container {
+            max-width: 400px;
+            width: 100%;
+            background: #111;
+            padding: 40px;
+            border-radius: 24px;
+            border: 1px solid #222;
+            text-align: center;
+        }
+        h1 { font-size: 1.5rem; margin-bottom: 10px; color: #FF6B35; }
+        .notice { 
+            background: #1a1a2e; 
+            padding: 16px; 
+            border-radius: 12px; 
+            margin-bottom: 24px;
+            font-size: 0.9rem;
+            color: #aaa;
+        }
+        .price { font-size: 2.5rem; font-weight: 800; margin-bottom: 24px; }
+        .form-group { margin-bottom: 16px; text-align: left; }
+        label { display: block; margin-bottom: 6px; color: #888; font-size: 0.9rem; }
+        input {
+            width: 100%;
+            padding: 14px;
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 1rem;
+        }
+        input:focus { outline: none; border-color: #FF6B35; }
+        .pay-btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #FF6B35, #F7931E);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 16px;
+        }
+        .back-link { display: block; margin-top: 20px; color: #888; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 결제 테스트</h1>
+        <div class="notice">
+            실제 결제 테스트입니다.<br>
+            1,000원이 결제 후 즉시 환불 처리됩니다.
+        </div>
+        <div class="price">1,000원</div>
+        <form id="testForm">
+            <div class="form-group">
+                <label>이름</label>
+                <input type="text" id="buyerName" value="테스트" required>
+            </div>
+            <div class="form-group">
+                <label>연락처</label>
+                <input type="tel" id="buyerTel" value="01012345678" required>
+            </div>
+            <div class="form-group">
+                <label>이메일</label>
+                <input type="email" id="buyerEmail" value="test@test.com" required>
+            </div>
+            <button type="submit" class="pay-btn">1,000원 테스트 결제</button>
+        </form>
+        <a href="/payment" class="back-link">← 실제 결제 페이지로</a>
+    </div>
+    <script>
+        document.getElementById('testForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const buyerName = document.getElementById('buyerName').value;
+            const buyerTel = document.getElementById('buyerTel').value;
+            const buyerEmail = document.getElementById('buyerEmail').value;
+            
+            if (typeof PortOne === 'undefined') {
+                alert('결제 모듈 로딩 중입니다.');
+                return;
+            }
+            
+            const paymentId = 'TEST_' + new Date().getTime() + '_' + Math.random().toString(36).substr(2, 9);
+            
+            PortOne.requestPayment({
+                storeId: 'store-d08be3e0-9ed0-4393-9974-0b9cbd799252',
+                channelKey: 'channel-key-1cb320d6-8851-4ab2-83de-b8fb88dd2613',
+                paymentId: paymentId,
+                orderName: '결제 테스트 (환불 예정)',
+                totalAmount: 1000,
+                currency: 'KRW',
+                payMethod: 'CARD',
+                redirectUrl: window.location.origin + '/payment-callback?name=' + encodeURIComponent(buyerName) + '&test=1',
+                customer: {
+                    fullName: buyerName,
+                    phoneNumber: buyerTel,
+                    email: buyerEmail
+                }
+            }).then(function(response) {
+                if (response.code != null) {
+                    alert('결제 실패: ' + (response.message || '알 수 없는 오류'));
+                } else {
+                    alert('결제 성공! paymentId: ' + paymentId);
+                    window.location.href = '/payment-success?name=' + encodeURIComponent(buyerName) + '&test=1';
+                }
+            }).catch(function(error) {
+                alert('오류: ' + (error.message || '알 수 없는 오류'));
+            });
+        });
     </script>
 </body>
 </html>`
