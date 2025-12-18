@@ -144,6 +144,11 @@ app.get('/payment.html', (c) => {
   return c.html(PAYMENT_HTML)
 })
 
+// 결제 콜백 페이지 (결제 결과 검증)
+app.get('/payment-callback', (c) => {
+  return c.html(PAYMENT_CALLBACK_HTML)
+})
+
 // 결제 성공 페이지 라우트
 app.get('/payment-success', (c) => {
   return c.html(PAYMENT_SUCCESS_HTML)
@@ -151,6 +156,11 @@ app.get('/payment-success', (c) => {
 
 app.get('/payment-success.html', (c) => {
   return c.html(PAYMENT_SUCCESS_HTML)
+})
+
+// 결제 실패 페이지 라우트
+app.get('/payment-fail', (c) => {
+  return c.html(PAYMENT_FAIL_HTML)
 })
 
 // 정적 파일 제공 (public 폴더)
@@ -541,7 +551,7 @@ const PAYMENT_HTML = `<!DOCTYPE html>
                 totalAmount: 2200000,
                 currency: 'KRW',
                 payMethod: 'CARD',
-                redirectUrl: window.location.origin + '/payment-success?name=' + encodeURIComponent(buyerName),
+                redirectUrl: window.location.origin + '/payment-callback?name=' + encodeURIComponent(buyerName),
                 customer: {
                     fullName: buyerName,
                     phoneNumber: buyerTel,
@@ -559,6 +569,159 @@ const PAYMENT_HTML = `<!DOCTYPE html>
                 alert('결제 처리 중 오류가 발생했습니다.\\n\\n' + (error.message || '다시 시도해주세요.'));
             });
         });
+    </script>
+</body>
+</html>`
+
+// 결제 콜백 페이지 HTML (결제 결과 검증)
+const PAYMENT_CALLBACK_HTML = `<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>결제 처리 중...</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background: #0a0a0a;
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        .loading { font-size: 1.2rem; }
+        .spinner {
+            width: 50px; height: 50px;
+            border: 4px solid #333;
+            border-top-color: #FF6B35;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+    <div class="loading">
+        <div class="spinner"></div>
+        <p>결제 결과를 확인하고 있습니다...</p>
+    </div>
+    <script>
+        // URL에서 결제 결과 파라미터 확인
+        const urlParams = new URLSearchParams(window.location.search);
+        const paymentId = urlParams.get('paymentId');
+        const code = urlParams.get('code');
+        const message = urlParams.get('message');
+        const name = urlParams.get('name') || '';
+        
+        // PortOne redirect 후 결과 확인
+        // code가 없으면 성공, code가 있으면 실패/취소
+        if (code) {
+            // 결제 실패 또는 취소
+            window.location.href = '/payment-fail?message=' + encodeURIComponent(message || '결제가 취소되었습니다.');
+        } else if (paymentId) {
+            // 결제 성공 (paymentId가 있으면 성공)
+            window.location.href = '/payment-success?name=' + encodeURIComponent(name);
+        } else {
+            // 파라미터가 없으면 결제 페이지로 리다이렉트
+            window.location.href = '/payment';
+        }
+    </script>
+</body>
+</html>`
+
+// 결제 실패 페이지 HTML
+const PAYMENT_FAIL_HTML = `<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>결제 실패 - XIΛIX AI 입문반</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background: #0a0a0a;
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 20px;
+        }
+        .fail-container {
+            max-width: 400px;
+            background: #111;
+            padding: 40px;
+            border-radius: 24px;
+            border: 1px solid #222;
+        }
+        .fail-icon { font-size: 4rem; margin-bottom: 20px; }
+        h1 { font-size: 1.5rem; margin-bottom: 16px; color: #f44336; }
+        p { color: #888; margin-bottom: 24px; line-height: 1.6; }
+        .message-box {
+            background: #1a1a1a;
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 24px;
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+        .retry-btn {
+            display: inline-block;
+            padding: 16px 40px;
+            background: linear-gradient(135deg, #FF6B35, #F7931E);
+            color: white;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+        .home-link {
+            display: block;
+            color: #888;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        .contact-box {
+            margin-top: 24px;
+            padding: 16px;
+            background: #1a2a1a;
+            border: 1px solid #2e7d32;
+            border-radius: 12px;
+        }
+        .contact-box .label { color: #81c784; font-size: 0.85rem; margin-bottom: 8px; }
+        .contact-box .phone { color: #4caf50; font-size: 1.1rem; font-weight: 600; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <div class="fail-container">
+        <div class="fail-icon">😔</div>
+        <h1>결제가 완료되지 않았습니다</h1>
+        <p>결제가 취소되었거나 오류가 발생했습니다.<br>다시 시도해 주세요.</p>
+        <div class="message-box" id="errorMessage"></div>
+        <a href="/payment" class="retry-btn">다시 결제하기</a>
+        <a href="/" class="home-link">← 홈으로 돌아가기</a>
+        <div class="contact-box">
+            <div class="label">결제 관련 문의</div>
+            <a href="tel:010-4845-3065" class="phone">📞 010-4845-3065</a>
+        </div>
+    </div>
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const message = urlParams.get('message');
+        const errorBox = document.getElementById('errorMessage');
+        if (message) {
+            errorBox.textContent = message;
+        } else {
+            errorBox.style.display = 'none';
+        }
     </script>
 </body>
 </html>`
