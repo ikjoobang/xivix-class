@@ -404,15 +404,22 @@
         }
         
         .instructor-photo {
-            width: 250px;
-            height: 250px;
+            width: 160px;
+            height: 160px;
             border-radius: 50%;
-            background: var(--gradient-accent);
+            background: var(--bg-card);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 6rem;
             margin: 0 auto;
+            overflow: hidden;
+            border: 3px solid var(--accent);
+        }
+        
+        .instructor-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
         
         .instructor-info h2 { font-size: 2rem; font-weight: 800; margin-bottom: 8px; }
@@ -728,7 +735,7 @@
         <div class="hero-content">
             <div class="hero-text">
                 <h1>독수리 타법 사장님,<br>이제 <span class="highlight">말로 명령</span>하세요</h1>
-                <p>타자 치지 마세요. AI 비서가 대신합니다.<br>6주 만에 평생 쓸 디지털 비서를 세팅해 드립니다.</p>
+                <p>타자치지 마세요.<br>AI 비서가 대신 합니다.<br><br>6주 만에 평생 쓸 디지털 비서를 세팅해 드립니다.</p>
                 <div class="hero-buttons">
                     <a href="/payment" class="btn-primary">지금 신청하기 →</a>
                     <a href="#curriculum" class="btn-secondary">커리큘럼 보기</a>
@@ -736,7 +743,7 @@
             </div>
             <div class="hero-visual">
                 <div class="hero-video-wrapper">
-                    <iframe src="https://www.youtube.com/embed/4Wjct59d_gc?rel=0&modestbranding=1" title="AI 활용 예시" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    <iframe src="https://www.youtube.com/embed/lUgFqogFMKM?rel=0&modestbranding=1" title="AI 활용 예시" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                 </div>
             </div>
         </div>
@@ -785,7 +792,7 @@
                 <div class="solution-text">
                     <span class="section-label">SOLUTION</span>
                     <h2>왜 구글 제미나이인가?</h2>
-                    <p>챗GPT는 사장님 컴퓨터 속 서류를 못 봅니다.<br>하지만 <strong>구글 제미나이</strong>는 다릅니다.</p>
+                    <p>챗GPT는<br>사장님 컴퓨터 속 서류를 못 봅니다.<br>하지만 <strong>구글 제미나이</strong>는 다릅니다.</p>
                     <ul class="solution-list">
                         <li><span class="check">✓</span><span>사장님 <strong>갤럭시폰</strong>과 바로 연결</span></li>
                         <li><span class="check">✓</span><span><strong>구글 드라이브</strong> 속 견적서 자동 찾기</span></li>
@@ -857,12 +864,12 @@
                 <h2 class="section-title">강사 소개</h2>
             </div>
             <div class="instructor-content">
-                <div class="instructor-photo">👨‍💼</div>
+                <div class="instructor-photo"><img src="https://www.genspark.ai/api/files/s/sVhqSOrN" alt="방익주 대표"></div>
                 <div class="instructor-info">
                     <h2>방익주 대표</h2>
                     <p class="instructor-title">XIVIX 대표 · AI 비즈니스 자동화 전문가</p>
-                    <p class="instructor-bio">"어려운 기술을 사장님의 언어로 통역해 드립니다."<br><br>20년간 IT 업계에서 일하며 수많은 사장님들의 디지털 고민을 해결해왔습니다.</p>
-                    <div class="instructor-quote">"이 강의는 공부가 아닙니다. 제가 직접 사장님 옆에서 세팅해 드리는 겁니다."</div>
+                    <p class="instructor-bio">"어렵다구요? 사장님의 언어로 통역해 드립니다."<br><br>제조, 도소매, 유통, 서비스, 정부과제, IT까지 해결해 왔습니다.</p>
+                    <div class="instructor-quote">"이 강의는 공부가 아닙니다.<br>제가 직접 사장님 옆에서 세팅해 드리는 겁니다."</div>
                 </div>
             </div>
         </div>
@@ -874,7 +881,7 @@
                 <span class="section-label">1기 모집</span>
                 <h2>지금 신청하세요</h2>
                 <div class="price">2,000,000원</div>
-                <p class="price-note">직원 한 달 월급으로 평생 비서를 만드세요</p>
+                <p class="price-note">직원 한 달 월급으로<br>평생 비서를 만드세요</p>
                 <div class="cta-details">
                     <div class="cta-detail"><strong>1월 개강</strong><span>시작일</span></div>
                     <div class="cta-detail"><strong>6주 과정</strong><span>커리큘럼</span></div>
@@ -966,7 +973,7 @@
             const chatBody = document.getElementById('chatBody');
             const div = document.createElement('div');
             div.className = 'chat-message bot';
-            div.innerHTML = '<div class="chat-bubble"><p style="margin-bottom:12px">사장님, 이 영상 한번 보세요! 👇</p><div style="border-radius:12px;overflow:hidden"><iframe width="100%" height="180" src="https://www.youtube.com/embed/4Wjct59d_gc?rel=0" frameborder="0" allowfullscreen></iframe></div></div>';
+            div.innerHTML = '<div class="chat-bubble"><p style="margin-bottom:12px">사장님, 이 영상 한번 보세요! 👇</p><div style="border-radius:12px;overflow:hidden"><iframe width="100%" height="180" src="https://www.youtube.com/embed/lUgFqogFMKM?rel=0" frameborder="0" allowfullscreen></iframe></div></div>';
             chatBody.appendChild(div);
             chatBody.scrollTop = chatBody.scrollHeight;
         }
