@@ -4,7 +4,7 @@
   "scripts": {
     "dev": "vite",
     "dev:sandbox": "wrangler pages dev dist --ip 0.0.0.0 --port 3000",
-    "build": "vite build",
+    "build": "vite build && node -e \"require('fs').writeFileSync('./dist/_routes.json', JSON.stringify({version:1,include:['/*'],exclude:['/static/*','/favicon.ico']},null,2))\"",
     "preview": "wrangler pages dev dist",
     "deploy": "npm run build && wrangler pages deploy dist",
     "deploy:prod": "npm run build && wrangler pages deploy dist --project-name xivix-class",
