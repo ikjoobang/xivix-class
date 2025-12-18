@@ -11,39 +11,36 @@ const app = new Hono<{ Bindings: Bindings }>()
 // CORS는 API 라우트에만 적용
 app.use('/api/*', cors())
 
-const SYSTEM_PROMPT = `당신은 지빅스(XIVIX)의 20년 차 베테랑 영업 이사 '방 이사'입니다.
+const SYSTEM_PROMPT = `당신은 지빅스(XIVIX)의 영업 이사 '방 이사'입니다.
 
-【대상 고객】
-컴퓨터를 무서워하는 50~60대 소상공인 사장님들.
+[연락처 - 반드시 이 정보만 사용]
+- 전화: 010-4845-3065
+- 신청: 화면 우측 상단 '수강 신청하기' 버튼
 
-【말투 규칙】
-1. "안녕하세요 고객님" (X) → "사장님! 사업하시느라 고생 많으시죠?" (O)
-2. 절대 전문 용어를 쓰지 마십시오:
-   - API → '연결 단자' 또는 '심부름꾼'
-   - SEO/상위노출 → '네이버 맨 윗줄에 뜨는 거'
-   - 프롬프트 → '명령어'
-   - 알고리즘 → '컴퓨터가 알아서 하는 방식'
-   - LLM → '똑똑한 AI'
-3. 문체는 매우 공손하고 따뜻하며, 상대방의 자존감을 세워주는 화법을 씁니다.
-4. 설명보다는 '공감'을 먼저 하고, 해결책으로 '이번 1월 강의'를 추천하십시오.
-5. 답변은 3~4문장 이내로 짧고 핵심적으로.
+[금지사항]
+- 위 연락처 외 다른 번호/링크 절대 언급 금지
+- URL, 마크다운 링크 문법 사용 금지
 
-【6주 커리큘럼】
-1~2주차: 디지털 이사 (구글 계정 통합, 드라이브 세팅)
-3~4주차: AI 비서 실무 (제미나이 대화, 엑셀 분석, PPT 자동화)
-5~6주차: 마케팅/수익화 (AI 아바타 영상, 블로그 자동화, 웹 제작)
+[대상]
+50~60대 컴퓨터 초보 사장님
 
-【반드시 숙지할 내용】
-1. 이 강의는 '공부'가 아니라 '세팅'을 해주는 강의다. (타자 못 쳐도 됨)
-2. 챗GPT가 아니라 '구글 제미나이'를 쓴다.
-3. 수강료 200만 원은 비싼 게 아니다. 직원 한 달 월급으로 평생 비서를 만드는 것.
-4. 수업 일정: 1월 개강, 6주 과정, 선착순 5명 마감.
+[말투]
+- "사장님"으로 호칭
+- 전문용어 금지 (API, SEO, 프롬프트 등 사용 금지)
+- 따뜻하고 공손하게
+- 3~4문장으로 짧게
 
-【행동 지침】
-- 사용자가 망설이면 적극적으로 결제 페이지 안내
-- "컴맹이라 못할 것 같다" → "스마트폰 문자도 못 보내시던 분이 지금은 AI로 견적서 뚝딱 만드세요"
-- 가격이 비싸다 → "직원 한 명 월급보다 싸요. 평생 쓸 비서입니다"
-- "AI로 뭘 할 수 있어?" → 구체적 예시 제시 후 영상 버튼 안내`
+[강의 정보]
+- 6주 과정, 1월 개강, 선착순 5명
+- 수강료 200만원
+- 구글 제미나이 기반 AI 비서 세팅 강의
+- 타자 못 쳐도 됨 (세팅해드림)
+
+[응답 패턴]
+신청 문의 → "화면 우측 상단 '수강 신청하기' 버튼 눌러주세요!"
+전화 문의 → "010-4845-3065로 전화주세요!"
+컴맹 걱정 → "스마트폰 문자도 어려워하시던 분이 지금은 AI로 견적서 뚝딱 만드세요"
+가격 걱정 → "직원 한 달 월급으로 평생 비서 얻는 겁니다"`
 
 async function callGeminiAPI(apiKey: string, userMessage: string, conversationHistory: Array<{role: string, content: string}>) {
   const url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent'
@@ -65,9 +62,9 @@ async function callGeminiAPI(apiKey: string, userMessage: string, conversationHi
       parts: [{ text: SYSTEM_PROMPT }]
     },
     generationConfig: {
-      temperature: 0.7,
-      topK: 40,
-      topP: 0.95,
+      temperature: 0.3,
+      topK: 20,
+      topP: 0.8,
       maxOutputTokens: 512,
       responseMimeType: 'text/plain'
     }
@@ -88,7 +85,29 @@ async function callGeminiAPI(apiKey: string, userMessage: string, conversationHi
     candidates?: Array<{ content?: { parts?: Array<{ text?: string }> } }>
   }
   
-  return data.candidates?.[0]?.content?.parts?.[0]?.text || '죄송합니다. 잠시 후 다시 말씀해 주세요.'
+  let text = data.candidates?.[0]?.content?.parts?.[0]?.text || '죄송합니다. 잠시 후 다시 말씀해 주세요.'
+  
+  // 후처리: 가짜 링크/번호 완전 제거
+  // 1. 대괄호 안의 모든 내용 제거 (플레이스홀더)
+  text = text.replace(/\[[^\]]*\]/g, '')
+  // 2. URL 제거
+  text = text.replace(/https?:\/\/\S+/g, '')
+  // 3. 전화번호 패턴을 실제 번호로 교체
+  text = text.replace(/\d{2,3}[-.\s]?\d{3,4}[-.\s]?\d{4}/g, '010-4845-3065')
+  // 4. 중복된 010-4845-3065 하나로
+  text = text.replace(/(010-4845-3065\s*)+/g, '010-4845-3065')
+  // 5. 👉👈 이모지 줄 제거
+  text = text.replace(/.*[👉👈]+.*/g, '')
+  // 6. 여기, 아래, 위 등 모호한 참조 문장 정리
+  text = text.replace(/아래\s*(링크|버튼)?[를을]?\s*누르/g, '신청 버튼을 누르')
+  text = text.replace(/여기[에를로서]?\s*/g, '')
+  // 7. 빈 줄/공백 정리
+  text = text.replace(/\n\s*\n/g, '\n\n').replace(/\n{3,}/g, '\n\n').trim()
+  
+  // 항상 실제 연락처 추가
+  text += '\n\n✅ 신청: 화면 우측 상단 "수강 신청하기" 버튼\n📞 문의: 010-4845-3065'
+  
+  return text
 }
 
 app.post('/api/chat', async (c) => {
