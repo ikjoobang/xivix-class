@@ -1,0 +1,740 @@
+export const landingPage = `<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XIVIX - AI 비서 세팅, 6주 완성</title>
+    <meta name="description" content="타자 치지 마세요. 말로 명령하세요. 50~60대 사장님을 위한 AI 비서 세팅 교육">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #0a0a0a;
+            --bg-card: #111111;
+            --bg-card-hover: #1a1a1a;
+            --text-primary: #ffffff;
+            --text-secondary: #888888;
+            --text-muted: #555555;
+            --accent: #FF6B35;
+            --accent-hover: #FF8555;
+            --border: #222222;
+            --gradient-accent: linear-gradient(135deg, #FF6B35 0%, #F7931E 100%);
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        
+        body {
+            font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-primary);
+            line-height: 1.7;
+            word-break: keep-all;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+        
+        .container { max-width: 1400px; margin: 0 auto; padding: 0 40px; }
+        @media (max-width: 768px) { .container { padding: 0 20px; } }
+        
+        /* 네비게이션 */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            background: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .nav-inner {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo { font-size: 1.5rem; font-weight: 800; letter-spacing: -1px; }
+        .logo span { background: var(--gradient-accent); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        
+        .nav-cta {
+            padding: 12px 24px;
+            background: var(--gradient-accent);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .nav-cta:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(255, 107, 53, 0.3); }
+        
+        /* 히어로 섹션 */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 120px 0 80px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(ellipse at 50% 0%, rgba(255, 107, 53, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+        }
+        
+        .hero-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 40px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: center;
+        }
+        
+        @media (max-width: 968px) {
+            .hero-content { grid-template-columns: 1fr; gap: 40px; text-align: center; }
+        }
+        
+        .hero-text h1 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 900;
+            line-height: 1.2;
+            margin-bottom: 24px;
+            letter-spacing: -2px;
+        }
+        
+        .hero-text h1 .highlight {
+            background: var(--gradient-accent);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .hero-text p {
+            font-size: clamp(1.2rem, 2vw, 1.5rem);
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+            line-height: 1.8;
+        }
+        
+        .hero-buttons { display: flex; gap: 16px; flex-wrap: wrap; }
+        @media (max-width: 968px) { .hero-buttons { justify-content: center; } }
+        
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 18px 36px;
+            background: var(--gradient-accent);
+            color: white;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 20px 40px rgba(255, 107, 53, 0.3); }
+        
+        .btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 18px 36px;
+            background: transparent;
+            color: white;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            border: 1px solid var(--border);
+            transition: all 0.2s;
+        }
+        .btn-secondary:hover { background: var(--bg-card); border-color: var(--text-muted); }
+        
+        .hero-video-wrapper {
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--border);
+        }
+        .hero-video-wrapper iframe { width: 100%; aspect-ratio: 16/9; display: block; }
+        
+        /* 스탯 섹션 */
+        .stats { padding: 80px 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; text-align: center; }
+        @media (max-width: 768px) { .stats-grid { grid-template-columns: 1fr; gap: 30px; } }
+        
+        .stat-item h3 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 900;
+            background: var(--gradient-accent);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 8px;
+        }
+        .stat-item p { color: var(--text-secondary); font-size: 1.1rem; }
+        
+        /* 섹션 공통 */
+        .section-header { text-align: center; margin-bottom: 80px; }
+        .section-label {
+            display: inline-block;
+            padding: 8px 16px;
+            background: rgba(255, 107, 53, 0.1);
+            color: var(--accent);
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+        .section-title { font-size: clamp(2rem, 4vw, 3rem); font-weight: 800; letter-spacing: -1px; margin-bottom: 20px; }
+        .section-desc { font-size: 1.2rem; color: var(--text-secondary); max-width: 600px; margin: 0 auto; }
+        
+        /* 문제 제기 섹션 */
+        .problem { padding: 120px 0; }
+        .problem-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+        @media (max-width: 968px) { .problem-grid { grid-template-columns: 1fr; } }
+        
+        .problem-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 40px;
+            transition: all 0.3s;
+        }
+        .problem-card:hover { background: var(--bg-card-hover); transform: translateY(-5px); border-color: var(--text-muted); }
+        .problem-icon { font-size: 2.5rem; margin-bottom: 20px; }
+        .problem-card h3 { font-size: 1.3rem; font-weight: 700; margin-bottom: 12px; }
+        .problem-card p { color: var(--text-secondary); font-size: 1.05rem; line-height: 1.8; }
+        
+        /* 솔루션 섹션 */
+        .solution { padding: 120px 0; background: linear-gradient(180deg, var(--bg-dark) 0%, #0f0f0f 100%); }
+        .solution-content { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+        @media (max-width: 968px) { .solution-content { grid-template-columns: 1fr; gap: 40px; } }
+        
+        .solution-text h2 { font-size: clamp(2rem, 4vw, 2.8rem); font-weight: 800; margin-bottom: 24px; }
+        .solution-text p { font-size: 1.2rem; color: var(--text-secondary); margin-bottom: 32px; line-height: 1.8; }
+        
+        .solution-list { list-style: none; }
+        .solution-list li { display: flex; align-items: flex-start; gap: 16px; padding: 16px 0; border-bottom: 1px solid var(--border); font-size: 1.1rem; }
+        .solution-list li:last-child { border-bottom: none; }
+        .solution-list .check { color: var(--accent); font-size: 1.3rem; flex-shrink: 0; }
+        
+        .solution-visual {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 40px;
+            text-align: center;
+        }
+        .gemini-logo { font-size: 4rem; margin-bottom: 20px; }
+        .solution-visual h3 { font-size: 1.5rem; margin-bottom: 12px; }
+        .solution-visual p { color: var(--text-secondary); }
+        
+        /* 커리큘럼 섹션 */
+        .curriculum { padding: 120px 0; }
+        .curriculum-timeline { max-width: 900px; margin: 0 auto; }
+        
+        .curriculum-item { display: grid; grid-template-columns: 120px 1fr; gap: 40px; margin-bottom: 60px; }
+        @media (max-width: 768px) { .curriculum-item { grid-template-columns: 1fr; gap: 16px; } }
+        
+        .curriculum-week { text-align: right; }
+        @media (max-width: 768px) { .curriculum-week { text-align: left; } }
+        
+        .week-badge { display: inline-block; padding: 8px 16px; background: var(--gradient-accent); border-radius: 20px; font-weight: 700; font-size: 0.9rem; }
+        
+        .curriculum-content {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 32px;
+            transition: all 0.3s;
+        }
+        .curriculum-content:hover { border-color: var(--accent); transform: translateX(10px); }
+        .curriculum-content h3 { font-size: 1.4rem; font-weight: 700; margin-bottom: 16px; display: flex; align-items: center; gap: 12px; }
+        .curriculum-content h3 span { font-size: 1.5rem; }
+        .curriculum-content p { color: var(--text-secondary); font-size: 1.1rem; line-height: 1.8; margin-bottom: 20px; }
+        
+        .curriculum-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+        .curriculum-tag { padding: 6px 14px; background: rgba(255, 107, 53, 0.1); color: var(--accent); border-radius: 20px; font-size: 0.85rem; font-weight: 500; }
+        
+        /* 강사 섹션 */
+        .instructor { padding: 120px 0; background: var(--bg-card); }
+        .instructor-content { display: grid; grid-template-columns: 300px 1fr; gap: 60px; align-items: center; max-width: 900px; margin: 0 auto; }
+        @media (max-width: 768px) { .instructor-content { grid-template-columns: 1fr; text-align: center; } }
+        
+        .instructor-photo {
+            width: 250px;
+            height: 250px;
+            border-radius: 50%;
+            background: var(--gradient-accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 6rem;
+            margin: 0 auto;
+        }
+        .instructor-info h2 { font-size: 2rem; font-weight: 800; margin-bottom: 8px; }
+        .instructor-title { color: var(--accent); font-weight: 600; margin-bottom: 20px; }
+        .instructor-bio { color: var(--text-secondary); font-size: 1.1rem; line-height: 1.9; }
+        .instructor-quote { margin-top: 24px; padding: 24px; background: var(--bg-dark); border-radius: 16px; border-left: 4px solid var(--accent); font-style: italic; color: var(--text-secondary); }
+        
+        /* CTA 섹션 */
+        .cta { padding: 120px 0; text-align: center; position: relative; overflow: hidden; }
+        .cta::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: radial-gradient(ellipse at 50% 50%, rgba(255, 107, 53, 0.15) 0%, transparent 60%); pointer-events: none; }
+        .cta-content { position: relative; z-index: 1; }
+        .cta h2 { font-size: clamp(2rem, 4vw, 3rem); font-weight: 900; margin-bottom: 16px; }
+        .cta .price { font-size: clamp(3rem, 6vw, 5rem); font-weight: 900; background: var(--gradient-accent); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 16px; }
+        .cta .price-note { color: var(--text-secondary); font-size: 1.2rem; margin-bottom: 40px; }
+        .cta-details { display: flex; justify-content: center; gap: 40px; margin-bottom: 40px; flex-wrap: wrap; }
+        .cta-detail { text-align: center; }
+        .cta-detail strong { display: block; font-size: 1.3rem; margin-bottom: 4px; }
+        .cta-detail span { color: var(--text-secondary); }
+        .cta .btn-primary { font-size: 1.3rem; padding: 24px 48px; }
+        
+        /* 푸터 */
+        footer { padding: 60px 0; border-top: 1px solid var(--border); text-align: center; color: var(--text-muted); }
+        footer p { margin-bottom: 8px; }
+        
+        /* 챗봇 */
+        .chatbot-fab {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 64px;
+            height: 64px;
+            background: var(--gradient-accent);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 1000;
+            border: none;
+            box-shadow: 0 10px 40px rgba(255, 107, 53, 0.4);
+            transition: all 0.3s;
+        }
+        .chatbot-fab:hover { transform: scale(1.1); box-shadow: 0 15px 50px rgba(255, 107, 53, 0.5); }
+        .chatbot-fab svg { width: 28px; height: 28px; fill: white; }
+        
+        .chat-tooltip {
+            position: fixed;
+            bottom: 110px;
+            right: 30px;
+            background: white;
+            color: #111;
+            padding: 16px 20px;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            max-width: 280px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            z-index: 999;
+            animation: float 3s ease-in-out infinite;
+        }
+        .chat-tooltip::after { content: ''; position: absolute; bottom: -8px; right: 24px; width: 16px; height: 16px; background: white; transform: rotate(45deg); }
+        .chat-tooltip-close { position: absolute; top: 8px; right: 12px; background: none; border: none; font-size: 1.2rem; cursor: pointer; color: #999; }
+        
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+        
+        .chat-window {
+            display: none;
+            position: fixed;
+            bottom: 110px;
+            right: 30px;
+            width: 400px;
+            max-width: calc(100vw - 40px);
+            height: 600px;
+            max-height: calc(100vh - 140px);
+            background: #111;
+            border-radius: 24px;
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.5);
+            z-index: 1001;
+            flex-direction: column;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+        
+        .chat-header { background: var(--gradient-accent); padding: 20px; display: flex; justify-content: space-between; align-items: center; }
+        .chat-header-info { display: flex; align-items: center; gap: 12px; }
+        .chat-avatar { width: 40px; height: 40px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; }
+        .chat-header-text h3 { font-size: 1rem; font-weight: 700; }
+        .chat-header-text p { font-size: 0.8rem; opacity: 0.9; }
+        .chat-close { background: none; border: none; color: white; font-size: 1.5rem; cursor: pointer; padding: 4px; }
+        
+        .chat-body { flex: 1; padding: 20px; overflow-y: auto; background: #0a0a0a; }
+        .chat-message { margin-bottom: 16px; display: flex; flex-direction: column; animation: fadeUp 0.3s ease; }
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .chat-message.bot { align-items: flex-start; }
+        .chat-message.user { align-items: flex-end; }
+        
+        .chat-bubble { max-width: 85%; padding: 14px 18px; border-radius: 18px; font-size: 0.95rem; line-height: 1.6; }
+        .chat-message.bot .chat-bubble { background: var(--bg-card); border: 1px solid var(--border); border-bottom-left-radius: 4px; }
+        .chat-message.user .chat-bubble { background: var(--gradient-accent); border-bottom-right-radius: 4px; }
+        
+        .chat-video-btn {
+            display: inline-block;
+            margin-top: 12px;
+            padding: 10px 16px;
+            background: rgba(255, 107, 53, 0.2);
+            color: var(--accent);
+            border: 1px solid var(--accent);
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .chat-video-btn:hover { background: var(--accent); color: white; }
+        
+        .typing-indicator { display: flex; gap: 4px; padding: 14px 18px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 18px; width: fit-content; }
+        .typing-indicator span { width: 8px; height: 8px; background: var(--text-muted); border-radius: 50%; animation: typing 1.4s infinite ease-in-out; }
+        .typing-indicator span:nth-child(1) { animation-delay: 0s; }
+        .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+        .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes typing { 0%, 100% { transform: translateY(0); opacity: 0.4; } 50% { transform: translateY(-4px); opacity: 1; } }
+        
+        .chat-input-area { padding: 16px; background: #111; border-top: 1px solid var(--border); display: flex; gap: 12px; }
+        .chat-input { flex: 1; padding: 14px 18px; background: #1a1a1a; border: 1px solid var(--border); border-radius: 12px; color: white; font-size: 0.95rem; outline: none; transition: border-color 0.2s; }
+        .chat-input:focus { border-color: var(--accent); }
+        .chat-input::placeholder { color: var(--text-muted); }
+        
+        .chat-send { padding: 14px 20px; background: var(--gradient-accent); border: none; border-radius: 12px; color: white; font-weight: 600; cursor: pointer; transition: transform 0.2s; }
+        .chat-send:hover { transform: scale(1.05); }
+        .chat-send:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+        
+        .scroll-hint { position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%); color: var(--text-muted); font-size: 0.9rem; display: flex; flex-direction: column; align-items: center; gap: 8px; animation: bounce 2s infinite; }
+        @keyframes bounce { 0%, 100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(10px); } }
+        
+        @media (max-width: 480px) {
+            .chat-window { width: calc(100vw - 20px); right: 10px; bottom: 100px; height: calc(100vh - 120px); }
+            .chatbot-fab { width: 56px; height: 56px; right: 20px; bottom: 20px; }
+            .chat-tooltip { right: 20px; max-width: 260px; }
+            .nav-inner { padding: 16px 20px; }
+            .nav-cta { padding: 10px 16px; font-size: 0.85rem; }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-inner">
+            <div class="logo">XIVIX<span>.</span></div>
+            <a href="/payment" class="nav-cta">수강 신청하기</a>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1>독수리 타법 사장님,<br>이제 <span class="highlight">말로 명령</span>하세요</h1>
+                <p>타자 치지 마세요. AI 비서가 대신합니다.<br>6주 만에 평생 쓸 디지털 비서를 세팅해 드립니다.</p>
+                <div class="hero-buttons">
+                    <a href="/payment" class="btn-primary">지금 신청하기 →</a>
+                    <a href="#curriculum" class="btn-secondary">커리큘럼 보기</a>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="hero-video-wrapper">
+                    <iframe src="https://www.youtube.com/embed/4Wjct59d_gc?rel=0&modestbranding=1" title="AI 활용 예시" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+            </div>
+        </div>
+        <div class="scroll-hint"><span>스크롤</span><span>↓</span></div>
+    </section>
+
+    <section class="stats">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-item"><h3>80%</h3><p>업무 시간 절감</p></div>
+                <div class="stat-item"><h3>6주</h3><p>완성 커리큘럼</p></div>
+                <div class="stat-item"><h3>5명</h3><p>선착순 마감</p></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="problem">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-label">PROBLEM</span>
+                <h2 class="section-title">혹시 이런 고민 있으신가요?</h2>
+                <p class="section-desc">디지털 시대, 사장님들의 공통된 고민입니다</p>
+            </div>
+            <div class="problem-grid">
+                <div class="problem-card">
+                    <div class="problem-icon">⌨️</div>
+                    <h3>타자가 너무 느려요</h3>
+                    <p>독수리 타법으로 이메일 하나 쓰는데 30분. 젊은 직원한테 부탁하자니 눈치 보이고...</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">📁</div>
+                    <h3>파일을 못 찾겠어요</h3>
+                    <p>분명히 저장했는데 어디 갔는지 모르겠고, USB는 자꾸 잃어버리고...</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">🤯</div>
+                    <h3>AI가 뭔지 모르겠어요</h3>
+                    <p>챗GPT? 제미나이? 다들 쓴다는데 나만 뒤처지는 것 같아서 불안해요.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="solution">
+        <div class="container">
+            <div class="solution-content">
+                <div class="solution-text">
+                    <span class="section-label">SOLUTION</span>
+                    <h2>왜 구글 제미나이인가?</h2>
+                    <p>챗GPT는 사장님 컴퓨터 속 서류를 못 봅니다.<br>하지만 <strong>구글 제미나이</strong>는 다릅니다.</p>
+                    <ul class="solution-list">
+                        <li><span class="check">✓</span><span>사장님 <strong>갤럭시폰</strong>과 바로 연결</span></li>
+                        <li><span class="check">✓</span><span><strong>구글 드라이브</strong> 속 견적서 자동 찾기</span></li>
+                        <li><span class="check">✓</span><span>타자 없이 <strong>말로 이메일</strong> 쓰기</span></li>
+                        <li><span class="check">✓</span><span>사진 찍으면 <strong>자동으로 정리</strong></span></li>
+                    </ul>
+                </div>
+                <div class="solution-visual">
+                    <div class="gemini-logo">✨</div>
+                    <h3>Google Gemini</h3>
+                    <p>사장님의 디지털 비서</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="curriculum" id="curriculum">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-label">CURRICULUM</span>
+                <h2 class="section-title">6주 뒤, 사장님은 달라집니다</h2>
+                <p class="section-desc">공부가 아닙니다. 세팅해 드리는 겁니다.</p>
+            </div>
+            <div class="curriculum-timeline">
+                <div class="curriculum-item">
+                    <div class="curriculum-week"><span class="week-badge">1~2주차</span></div>
+                    <div class="curriculum-content">
+                        <h3><span>📱</span> 디지털 이사</h3>
+                        <p>여기저기 흩어진 아이디/비번, 구글 하나로 통일합니다.<br>USB는 갖다 버리세요. 이제 클라우드에 다 넣어드립니다.</p>
+                        <div class="curriculum-tags">
+                            <span class="curriculum-tag">구글 계정 통합</span>
+                            <span class="curriculum-tag">드라이브 세팅</span>
+                            <span class="curriculum-tag">갤럭시 연동</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="curriculum-item">
+                    <div class="curriculum-week"><span class="week-badge">3~4주차</span></div>
+                    <div class="curriculum-content">
+                        <h3><span>🤖</span> AI 비서 실무</h3>
+                        <p>"이거 찾아줘", "이거 정리해줘" 말로 시키는 법을 배웁니다.<br>엑셀 숫자도 AI가 그래프로 만들어줍니다.</p>
+                        <div class="curriculum-tags">
+                            <span class="curriculum-tag">제미나이 대화법</span>
+                            <span class="curriculum-tag">엑셀 자동 분석</span>
+                            <span class="curriculum-tag">PPT 자동 디자인</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="curriculum-item">
+                    <div class="curriculum-week"><span class="week-badge">5~6주차</span></div>
+                    <div class="curriculum-content">
+                        <h3><span>🚀</span> 마케팅 & 수익화</h3>
+                        <p>AI 아바타로 홍보 영상 만들기. 얼굴 안 나와도 됩니다.<br>블로그 자동화로 네이버 맨 윗줄에 내 가게 띄우기.</p>
+                        <div class="curriculum-tags">
+                            <span class="curriculum-tag">AI 아바타 영상</span>
+                            <span class="curriculum-tag">블로그 자동화</span>
+                            <span class="curriculum-tag">AI 웹사이트 제작</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="instructor">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-label">INSTRUCTOR</span>
+                <h2 class="section-title">강사 소개</h2>
+            </div>
+            <div class="instructor-content">
+                <div class="instructor-photo">👨‍💼</div>
+                <div class="instructor-info">
+                    <h2>방익주 대표</h2>
+                    <p class="instructor-title">XIVIX 대표 · AI 비즈니스 자동화 전문가</p>
+                    <p class="instructor-bio">"어려운 기술을 사장님의 언어로 통역해 드립니다."<br><br>20년간 IT 업계에서 일하며 수많은 사장님들의 디지털 고민을 해결해왔습니다. 전문 용어 없이, 사장님이 이해하실 수 있는 말로 AI를 설명하고 세팅해 드립니다.</p>
+                    <div class="instructor-quote">"이 강의는 공부가 아닙니다. 제가 직접 사장님 옆에서 세팅해 드리는 겁니다. 타자 못 치셔도, 컴퓨터 잘 모르셔도 괜찮습니다."</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta" id="apply">
+        <div class="container">
+            <div class="cta-content">
+                <span class="section-label">1기 모집</span>
+                <h2>지금 신청하세요</h2>
+                <div class="price">2,000,000원</div>
+                <p class="price-note">직원 한 달 월급으로 평생 비서를 만드세요</p>
+                <div class="cta-details">
+                    <div class="cta-detail"><strong>1월 개강</strong><span>시작일</span></div>
+                    <div class="cta-detail"><strong>6주 과정</strong><span>커리큘럼</span></div>
+                    <div class="cta-detail"><strong>선착순 5명</strong><span>정원</span></div>
+                </div>
+                <a href="/payment" class="btn-primary">지금 바로 결제하기 →</a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p><strong>XIVIX</strong> · 사장님의 디지털 파트너</p>
+            <p>문의: 방익주 대표 비서실</p>
+            <p style="margin-top: 20px; font-size: 0.85rem;">© 2024 XIVIX. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <div class="chat-tooltip" id="chatTooltip" style="display: none;">
+        <button class="chat-tooltip-close" onclick="closeTooltip()">×</button>
+        사장님! 글 읽기 힘드시죠?<br>제가 핵심만 말씀드릴까요?
+    </div>
+
+    <button class="chatbot-fab" onclick="toggleChat()" aria-label="상담하기">
+        <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/></svg>
+    </button>
+
+    <div class="chat-window" id="chatWindow">
+        <div class="chat-header">
+            <div class="chat-header-info">
+                <div class="chat-avatar">👨‍💼</div>
+                <div class="chat-header-text"><h3>방익주 대표 비서실</h3><p>무엇이든 물어보세요</p></div>
+            </div>
+            <button class="chat-close" onclick="toggleChat()">×</button>
+        </div>
+        <div class="chat-body" id="chatBody">
+            <div class="chat-message bot">
+                <div class="chat-bubble">
+                    어서오세요 사장님! 저는 방 이사입니다. 😊<br><br>
+                    궁금한 거 편하게 물어보세요.<br>
+                    "이거 배우면 진짜 할 수 있어?" 하고 물어보셔도 돼요!
+                    <button class="chat-video-btn" onclick="showVideo()">🎬 예시 영상 보기</button>
+                </div>
+            </div>
+        </div>
+        <div class="chat-input-area">
+            <input type="text" class="chat-input" id="userInput" placeholder="궁금한 점을 물어보세요..." onkeypress="handleKeyPress(event)">
+            <button class="chat-send" id="sendBtn" onclick="sendMessage()">전송</button>
+        </div>
+    </div>
+
+    <script>
+        let conversationHistory = [];
+        let isWaitingResponse = false;
+        
+        setTimeout(() => {
+            const tooltip = document.getElementById('chatTooltip');
+            const chatWindow = document.getElementById('chatWindow');
+            if (chatWindow.style.display !== 'flex') tooltip.style.display = 'block';
+        }, 5000);
+        
+        function closeTooltip() { document.getElementById('chatTooltip').style.display = 'none'; }
+        
+        function toggleChat() {
+            const chatWindow = document.getElementById('chatWindow');
+            const tooltip = document.getElementById('chatTooltip');
+            if (chatWindow.style.display === 'flex') {
+                chatWindow.style.display = 'none';
+            } else {
+                chatWindow.style.display = 'flex';
+                tooltip.style.display = 'none';
+                document.getElementById('userInput').focus();
+            }
+        }
+        
+        function handleKeyPress(event) { if (event.key === 'Enter' && !isWaitingResponse) sendMessage(); }
+        
+        function addMessage(content, isBot, includeVideo = false) {
+            const chatBody = document.getElementById('chatBody');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'chat-message ' + (isBot ? 'bot' : 'user');
+            let html = '<div class="chat-bubble">' + content.replace(/\\n/g, '<br>');
+            if (includeVideo) html += '<button class="chat-video-btn" onclick="showVideo()">🎬 예시 영상 보기</button>';
+            html += '</div>';
+            messageDiv.innerHTML = html;
+            chatBody.appendChild(messageDiv);
+            chatBody.scrollTop = chatBody.scrollHeight;
+        }
+        
+        function showVideo() {
+            const chatBody = document.getElementById('chatBody');
+            const videoDiv = document.createElement('div');
+            videoDiv.className = 'chat-message bot';
+            videoDiv.innerHTML = '<div class="chat-bubble"><p style="margin-bottom: 12px;">사장님, 이 영상 한번 보세요! AI가 실제로 뭘 하는지 보여드립니다. 👇</p><div style="border-radius: 12px; overflow: hidden;"><iframe width="100%" height="180" src="https://www.youtube.com/embed/4Wjct59d_gc?rel=0" frameborder="0" allowfullscreen></iframe></div></div>';
+            chatBody.appendChild(videoDiv);
+            chatBody.scrollTop = chatBody.scrollHeight;
+        }
+        
+        function showTypingIndicator() {
+            const chatBody = document.getElementById('chatBody');
+            const typingDiv = document.createElement('div');
+            typingDiv.id = 'typingIndicator';
+            typingDiv.className = 'chat-message bot';
+            typingDiv.innerHTML = '<div class="typing-indicator"><span></span><span></span><span></span></div>';
+            chatBody.appendChild(typingDiv);
+            chatBody.scrollTop = chatBody.scrollHeight;
+        }
+        
+        function removeTypingIndicator() { const typing = document.getElementById('typingIndicator'); if (typing) typing.remove(); }
+        
+        async function sendMessage() {
+            const input = document.getElementById('userInput');
+            const sendBtn = document.getElementById('sendBtn');
+            const message = input.value.trim();
+            if (!message || isWaitingResponse) return;
+            
+            addMessage(message, false);
+            input.value = '';
+            conversationHistory.push({ role: 'user', content: message });
+            isWaitingResponse = true;
+            sendBtn.disabled = true;
+            showTypingIndicator();
+            
+            try {
+                const response = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: message, history: conversationHistory.slice(-10) })
+                });
+                const data = await response.json();
+                removeTypingIndicator();
+                if (data.success && data.response) {
+                    const includeVideo = message.includes('뭘') || message.includes('예시') || message.includes('보여');
+                    addMessage(data.response, true, includeVideo);
+                    conversationHistory.push({ role: 'assistant', content: data.response });
+                } else {
+                    addMessage(data.error || '죄송합니다. 다시 말씀해 주세요.', true);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                removeTypingIndicator();
+                addMessage('죄송합니다. 연결이 원활하지 않습니다.', true);
+            }
+            isWaitingResponse = false;
+            sendBtn.disabled = false;
+            input.focus();
+        }
+    </script>
+</body>
+</html>`;
