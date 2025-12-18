@@ -531,14 +531,17 @@ const PAYMENT_HTML = `<!DOCTYPE html>
             }
             
             // PortOne V2 API 결제 요청
+            const paymentId = 'XILIX_' + new Date().getTime() + '_' + Math.random().toString(36).substr(2, 9);
+            
             PortOne.requestPayment({
                 storeId: 'store-d08be3e0-9ed0-4393-9974-0b9cbd799252',
                 channelKey: 'channel-key-1cb320d6-8851-4ab2-83de-b8fb88dd2613',
-                paymentId: 'XIΛIX_' + new Date().getTime(),
+                paymentId: paymentId,
                 orderName: 'XIΛIX AI 입문반 1기 (VAT 포함)',
                 totalAmount: 2200000,
                 currency: 'KRW',
                 payMethod: 'CARD',
+                redirectUrl: window.location.origin + '/payment-success?name=' + encodeURIComponent(buyerName),
                 customer: {
                     fullName: buyerName,
                     phoneNumber: buyerTel,
