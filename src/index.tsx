@@ -173,7 +173,7 @@ const PAYMENT_HTML = `<!DOCTYPE html>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>결제하기 - XIVIX AI 입문반</title>
-    <script src="https://cdn.iamport.kr/v1/iamport.js"></script>
+    <script src="https://cdn.portone.io/v2/browser-sdk.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -533,28 +533,35 @@ const PAYMENT_HTML = `<!DOCTYPE html>
                 return;
             }
             
-            if (typeof IMP === 'undefined') {
+            if (typeof PortOne === 'undefined') {
                 alert('결제 모듈 로딩 중입니다. 잠시 후 다시 시도해주세요.');
                 return;
             }
             
-            IMP.init('imp57573373');
-            
-            IMP.request_pay({
-                pg: 'html5_inicis.MOI9559449',
-                pay_method: 'card',
-                merchant_uid: 'XIVIX_' + new Date().getTime(),
-                name: 'XIVIX AI 입문반 1기 (VAT 포함)',
-                amount: 2200000,
-                buyer_email: buyerEmail,
-                buyer_name: buyerName,
-                buyer_tel: buyerTel,
-            }, function(rsp) {
-                if (rsp.success) {
-                    window.location.href = '/payment-success?name=' + encodeURIComponent(buyerName);
-                } else {
-                    alert('결제가 취소되었거나 실패했습니다.\\n\\n' + (rsp.error_msg || '다시 시도해주세요.'));
+            // PortOne V2 API 결제 요청
+            PortOne.requestPayment({
+                storeId: 'store-d08be3e0-9ed0-4393-9974-0b9cbd799252',
+                channelKey: 'channel-key-1cb320d6-8851-4ab2-83de-b8fb88dd2613',
+                paymentId: 'XIVIX_' + new Date().getTime(),
+                orderName: 'XIVIX AI 입문반 1기 (VAT 포함)',
+                totalAmount: 2200000,
+                currency: 'KRW',
+                payMethod: 'CARD',
+                customer: {
+                    fullName: buyerName,
+                    phoneNumber: buyerTel,
+                    email: buyerEmail
                 }
+            }).then(function(response) {
+                if (response.code != null) {
+                    // 오류 발생
+                    alert('결제가 취소되었거나 실패했습니다.\\n\\n' + (response.message || '다시 시도해주세요.'));
+                } else {
+                    // 결제 성공
+                    window.location.href = '/payment-success?name=' + encodeURIComponent(buyerName);
+                }
+            }).catch(function(error) {
+                alert('결제 처리 중 오류가 발생했습니다.\\n\\n' + (error.message || '다시 시도해주세요.'));
             });
         });
     </script>
