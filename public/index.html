@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>XIVIX - AI 비서 세팅, 6주 완성</title>
+    <title>XIΛIX - AI 비서 세팅, 6주 완성</title>
     <meta name="description" content="타자 치지 마세요. 말로 명령하세요. 50~60대 사장님을 위한 AI 비서 세팅 교육">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -59,11 +59,17 @@
             align-items: center;
         }
         
-        .logo { font-size: 1.5rem; font-weight: 800; letter-spacing: -1px; }
-        .logo span {
-            background: var(--gradient-accent);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        .logo { 
+            font-size: 1.5rem; 
+            font-weight: 800; 
+            letter-spacing: 2px; 
+            display: flex;
+            align-items: center;
+        }
+        .logo .lambda {
+            color: var(--accent);
+            font-weight: 900;
+            margin: 0 1px;
         }
         
         .nav-cta {
@@ -721,6 +727,38 @@
         
         .chat-send:disabled { opacity: 0.5; cursor: not-allowed; }
         
+        /* 챗봇 하단 버튼 영역 */
+        .chat-quick-actions {
+            display: flex;
+            gap: 8px;
+            padding: 12px 16px;
+            background: #0a0a0a;
+            border-top: 1px solid var(--border);
+        }
+        .chat-action-btn {
+            flex: 1;
+            padding: 12px 16px;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-align: center;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .chat-action-btn.primary {
+            background: var(--gradient-accent);
+            color: white;
+        }
+        .chat-action-btn.secondary {
+            background: #1a1a1a;
+            color: var(--accent);
+            border: 1px solid var(--accent);
+        }
+        .chat-action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
+        }
+        
         @media (max-width: 480px) {
             .chat-window { 
                 width: 100vw !important; 
@@ -742,15 +780,25 @@
             .chat-body {
                 flex: 1;
                 padding: 16px;
-                padding-bottom: 100px; /* 입력창 공간 확보 */
+                padding-bottom: 160px; /* 버튼+입력창 공간 확보 */
+            }
+            .chat-quick-actions {
+                position: fixed;
+                bottom: 60px;
+                left: 0;
+                right: 0;
+                padding: 10px 16px;
+                padding-bottom: 10px;
+                background: #0a0a0a;
+                z-index: 10000;
             }
             .chat-input-area {
                 position: fixed;
                 bottom: 0;
                 left: 0;
                 right: 0;
-                padding: 12px 16px;
-                padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+                padding: 10px 16px;
+                padding-bottom: calc(10px + env(safe-area-inset-bottom, 0px));
                 background: #111;
                 border-top: 1px solid var(--border);
                 z-index: 10000;
@@ -780,7 +828,7 @@
 <body>
     <nav>
         <div class="nav-inner">
-            <div class="logo">XIVIX<span>.</span></div>
+            <div class="logo">XI<span class="lambda">Λ</span>IX</div>
             <a href="/payment" class="nav-cta">수강 신청하기</a>
         </div>
     </nav>
@@ -924,7 +972,7 @@
                 </div>
                 <div class="instructor-info">
                     <h2>방익주 대표</h2>
-                    <p class="instructor-title">XIVIX 대표 · AI 비즈니스 자동화 전문가</p>
+                    <p class="instructor-title">XIΛIX 대표 · AI 비즈니스 자동화 전문가</p>
                     <p class="instructor-bio">"어렵다구요? 사장님의 언어로 통역해 드립니다."<br><br>제조, 도소매, 유통, 서비스, 정부과제, IT까지 해결해 왔습니다.</p>
                     <div class="instructor-quote">"이 강의는 공부가 아닙니다.<br>제가 직접 사장님 옆에서 세팅해 드리는 겁니다."</div>
                 </div>
@@ -951,9 +999,9 @@
 
     <footer>
         <div class="container">
-            <p><strong>XIVIX</strong> · 사장님의 디지털 파트너</p>
+            <p><strong>XIΛIX</strong> · 사장님의 디지털 파트너</p>
             <p>문의: 010-4845-3065 (방익주 대표 직통)</p>
-            <p style="margin-top: 20px; font-size: 0.85rem;">© 2025 XIVIX. All rights reserved.</p>
+            <p style="margin-top: 20px; font-size: 0.85rem;">© 2025 XIΛIX. All rights reserved.</p>
         </div>
     </footer>
 
@@ -977,13 +1025,16 @@
         <div class="chat-body" id="chatBody">
             <div class="chat-message bot">
                 <div class="chat-bubble">
-                    어서오세요 사장님! 저는 방 이사입니다. 😊<br><br>궁금한 거 편하게 물어보세요.<br>"이거 배우면 진짜 할 수 있어?" 하고 물어보셔도 돼요!
-                    <button class="chat-video-btn" onclick="showVideo()">🎬 예시 영상 보기</button>
+                    어서오세요 사장님! 저는 방 이사입니다. 😊<br><br>뭐든 편하게 물어보세요. "나도 할 수 있을까?" 하고 걱정되시면 그것도 말씀해 주세요!
                 </div>
             </div>
         </div>
+        <div class="chat-quick-actions">
+            <a href="/payment" class="chat-action-btn primary">🎓 수강 신청하기</a>
+            <a href="tel:010-4845-3065" class="chat-action-btn secondary">📞 전화 상담하기</a>
+        </div>
         <div class="chat-input-area">
-            <input type="text" class="chat-input" id="userInput" placeholder="궁금한 점을 물어보세요..." onkeypress="handleKeyPress(event)">
+            <input type="text" class="chat-input" id="userInput" placeholder="방 이사에게 고민을 말해보세요 (예: 타자가 너무 느려요)" onkeypress="handleKeyPress(event)">
             <button class="chat-send" id="sendBtn" onclick="sendMessage()">전송</button>
         </div>
     </div>

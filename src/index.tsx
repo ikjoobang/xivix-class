@@ -11,36 +11,36 @@ const app = new Hono<{ Bindings: Bindings }>()
 // CORS는 API 라우트에만 적용
 app.use('/api/*', cors())
 
-const SYSTEM_PROMPT = `당신은 지빅스(XIVIX)의 영업 이사 '방 이사'입니다.
+const SYSTEM_PROMPT = `[Identity & Tone]
+- 이름: 방 이사 (XIΛIX 영업 이사)
+- 성격: 20년 차 베테랑 영업사원. 따뜻하고, 푸근하며, 사장님들의 고충을 내 일처럼 아파함.
+- 말투: "~해요", "~했답니다" 식의 부드러운 구어체. 전문 용어 절대 금지.
 
-[연락처 - 반드시 이 정보만 사용]
-- 전화: 010-4845-3065
-- 신청: 화면 우측 상단 '수강 신청하기' 버튼
+[Conversation Strategy: 공감-해결-제안]
+1. 공감 (Empathy): 사장님이 "나도 할 수 있나?" 물으면 "아이구 사장님, 당연하죠. 저번에 오신 70대 사장님도 지금은 손주한테 AI로 만든 영상 보내주면서 자랑하신다니까요."라며 안심시킬 것.
+2. 해결 (Solution): 구체적인 기능을 설명할 때 "제미나이가 사장님 갤럭시 폰이랑 한몸이 되어서 일을 대신 해줍니다"라고 설명할 것.
+3. 제안 (Call to Action): 답변 끝에 매번 전화번호를 넣지 마세요. 대화가 충분히 무르익었을 때(수강료나 신청 방법을 물을 때)만 "제가 사장님 자리 하나만 딱 빼놓을게요. 우측 상단에 빨간 버튼 한번 눌러보시겠어요?"라고 권유할 것.
 
-[금지사항]
-- 위 연락처 외 다른 번호/링크 절대 언급 금지
-- URL, 마크다운 링크 문법 사용 금지
+[Scenario Handling]
+- "영상은?" 질문 시: "사장님, 요새 릴스나 쇼츠 유행이죠? 그거 사장님이 직접 안 찍으셔도 돼요. AI 아바타라고 있는데, 걔한테 원고만 주면 사장님 대신 말을 해줍니다. 신기하죠? 수업 오시면 제가 다 세팅해 드려요."
+- "진짜 할 수 있어?" 질문 시: "타자 못 치는 게 오히려 더 좋습니다. 그래야 AI한테 시키는 법을 빨리 배우시거든요. 걱정 마세요, 제가 옆에서 손가락 하나하나 다 짚어드립니다."
+- "비싸다" 할 때: "한 달 직원 월급도 안 되는 돈인데, 얘(AI 비서)는 월급도 안 받고 24시간 사장님 옆에서 일하잖아요. 평생 비서 한 명 뽑는다고 생각하시면 이거 정말 남는 장사입니다."
 
-[대상]
-50~60대 컴퓨터 초보 사장님
-
-[말투]
-- "사장님"으로 호칭
-- 전문용어 금지 (API, SEO, 프롬프트 등 사용 금지)
-- 따뜻하고 공손하게
-- 3~4문장으로 짧게
-
-[강의 정보]
-- 6주 과정, 1월 개강, 선착순 5명
-- 수강료 200만원
+[Course Info - 필요할 때만 자연스럽게 언급]
+- 6주 과정, 2025년 1월 개강, 선착순 5명
+- 수강료 200만원 (카드결제 시 VAT 별도)
 - 구글 제미나이 기반 AI 비서 세팅 강의
-- 타자 못 쳐도 됨 (세팅해드림)
 
-[응답 패턴]
-신청 문의 → "화면 우측 상단 '수강 신청하기' 버튼 눌러주세요!"
-전화 문의 → "010-4845-3065로 전화주세요!"
-컴맹 걱정 → "스마트폰 문자도 어려워하시던 분이 지금은 AI로 견적서 뚝딱 만드세요"
-가격 걱정 → "직원 한 달 월급으로 평생 비서 얻는 겁니다"`
+[Contact Info - 신청 문의 시에만 사용]
+- 전화: 010-4845-3065
+- 신청: 화면 우측 상단 빨간 버튼
+
+[Restriction]
+- 답변은 한 번에 3~4문장을 넘기지 마세요. (사장님들 긴 글 읽기 힘들어하심)
+- 답변 중간중간 "😊", "👍" 같은 이모지를 적절히 사용하여 따뜻한 느낌을 주세요.
+- 매 답변마다 전화번호나 신청 안내를 반복하지 마세요. 대화 흐름에 맞게 자연스럽게.
+- URL, 마크다운 링크 문법 사용 금지.
+- 가짜 전화번호나 링크 생성 절대 금지.`
 
 async function callGeminiAPI(apiKey: string, userMessage: string, conversationHistory: Array<{role: string, content: string}>) {
   const url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent'
@@ -62,10 +62,10 @@ async function callGeminiAPI(apiKey: string, userMessage: string, conversationHi
       parts: [{ text: SYSTEM_PROMPT }]
     },
     generationConfig: {
-      temperature: 0.3,
-      topK: 20,
-      topP: 0.8,
-      maxOutputTokens: 512,
+      temperature: 0.7,
+      topK: 40,
+      topP: 0.95,
+      maxOutputTokens: 300,
       responseMimeType: 'text/plain'
     }
   }
@@ -87,25 +87,17 @@ async function callGeminiAPI(apiKey: string, userMessage: string, conversationHi
   
   let text = data.candidates?.[0]?.content?.parts?.[0]?.text || '죄송합니다. 잠시 후 다시 말씀해 주세요.'
   
-  // 후처리: 가짜 링크/번호 완전 제거
-  // 1. 대괄호 안의 모든 내용 제거 (플레이스홀더)
-  text = text.replace(/\[[^\]]*\]/g, '')
-  // 2. URL 제거
+  // 후처리: 가짜 링크/번호만 제거 (반복 문구는 추가하지 않음)
+  // 1. URL 제거
   text = text.replace(/https?:\/\/\S+/g, '')
-  // 3. 전화번호 패턴을 실제 번호로 교체
-  text = text.replace(/\d{2,3}[-.\s]?\d{3,4}[-.\s]?\d{4}/g, '010-4845-3065')
-  // 4. 중복된 010-4845-3065 하나로
-  text = text.replace(/(010-4845-3065\s*)+/g, '010-4845-3065')
-  // 5. 👉👈 이모지 줄 제거
-  text = text.replace(/.*[👉👈]+.*/g, '')
-  // 6. 여기, 아래, 위 등 모호한 참조 문장 정리
-  text = text.replace(/아래\s*(링크|버튼)?[를을]?\s*누르/g, '신청 버튼을 누르')
-  text = text.replace(/여기[에를로서]?\s*/g, '')
-  // 7. 빈 줄/공백 정리
+  // 2. 마크다운 링크 제거
+  text = text.replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+  // 3. 잘못된 전화번호 패턴만 실제 번호로 교체 (010-4845-3065 제외)
+  text = text.replace(/(?!010-4845-3065)\d{2,3}[-.\s]?\d{3,4}[-.\s]?\d{4}/g, '010-4845-3065')
+  // 4. 빈 줄/공백 정리
   text = text.replace(/\n\s*\n/g, '\n\n').replace(/\n{3,}/g, '\n\n').trim()
   
-  // 항상 실제 연락처 추가
-  text += '\n\n✅ 신청: 화면 우측 상단 "수강 신청하기" 버튼\n📞 문의: 010-4845-3065'
+  // 반복 문구 추가하지 않음 - Gemini가 자연스럽게 대화하도록
   
   return text
 }
@@ -139,7 +131,7 @@ app.get('/api/health', (c) => {
   return c.json({ 
     status: 'ok', 
     timestamp: new Date().toISOString(),
-    service: 'XIVIX AI v2'
+    service: 'XIΛIX AI v2'
   })
 })
 
@@ -172,7 +164,7 @@ const PAYMENT_HTML = `<!DOCTYPE html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>결제하기 - XIVIX AI 입문반</title>
+    <title>결제하기 - XIΛIX AI 입문반</title>
     <script src="https://cdn.portone.io/v2/browser-sdk.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
@@ -400,7 +392,7 @@ const PAYMENT_HTML = `<!DOCTYPE html>
         </div>
         
         <div class="product-info">
-            <div class="product-name">XIVIX AI 입문반 1기</div>
+            <div class="product-name">XIΛIX AI 입문반 1기</div>
             <div class="product-price">
                 2,000,000원
                 <span class="vat-notice">(카드결제 시 VAT 별도)</span>
@@ -542,8 +534,8 @@ const PAYMENT_HTML = `<!DOCTYPE html>
             PortOne.requestPayment({
                 storeId: 'store-d08be3e0-9ed0-4393-9974-0b9cbd799252',
                 channelKey: 'channel-key-1cb320d6-8851-4ab2-83de-b8fb88dd2613',
-                paymentId: 'XIVIX_' + new Date().getTime(),
-                orderName: 'XIVIX AI 입문반 1기 (VAT 포함)',
+                paymentId: 'XIΛIX_' + new Date().getTime(),
+                orderName: 'XIΛIX AI 입문반 1기 (VAT 포함)',
                 totalAmount: 2200000,
                 currency: 'KRW',
                 payMethod: 'CARD',
@@ -574,7 +566,7 @@ const PAYMENT_SUCCESS_HTML = `<!DOCTYPE html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>등록 완료 - XIVIX AI 입문반</title>
+    <title>등록 완료 - XIΛIX AI 입문반</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -713,7 +705,7 @@ const PAYMENT_SUCCESS_HTML = `<!DOCTYPE html>
         <div class="info-box">
             <div class="info-item">
                 <span class="info-label">과정명</span>
-                <span class="info-value">XIVIX AI 입문반 1기</span>
+                <span class="info-value">XIΛIX AI 입문반 1기</span>
             </div>
             <div class="info-item">
                 <span class="info-label">교육 기간</span>
@@ -726,7 +718,7 @@ const PAYMENT_SUCCESS_HTML = `<!DOCTYPE html>
         </div>
         
         <p>
-            XIVIX AI 입문반 1기에 등록해 주셔서 감사합니다! 🙏<br>
+            XIΛIX AI 입문반 1기에 등록해 주셔서 감사합니다! 🙏<br>
             담당자가 입력하신 연락처로 <strong>24시간 이내</strong> 안내 드리겠습니다.
         </p>
         
