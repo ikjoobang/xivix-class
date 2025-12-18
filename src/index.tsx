@@ -1,8 +1,6 @@
 import { Hono } from 'hono'
 import { cors } from 'hono/cors'
 import { serveStatic } from 'hono/cloudflare-pages'
-import { landingPage } from './pages/landing'
-import { paymentPage, paymentSuccessPage } from './pages/payment'
 
 type Bindings = {
   GEMINI_API_KEY: string
@@ -11,7 +9,7 @@ type Bindings = {
 const app = new Hono<{ Bindings: Bindings }>()
 
 app.use('/api/*', cors())
-app.use('/static/*', serveStatic())
+app.use('/*', serveStatic())
 
 const SYSTEM_PROMPT = `당신은 지빅스(XIVIX)의 20년 차 베테랑 영업 이사 '방 이사'입니다.
 
@@ -125,10 +123,5 @@ app.get('/api/health', (c) => {
     service: 'XIVIX AI v2'
   })
 })
-
-// 페이지 라우트
-app.get('/', (c) => c.html(landingPage))
-app.get('/payment', (c) => c.html(paymentPage))
-app.get('/payment-success', (c) => c.html(paymentSuccessPage))
 
 export default app
